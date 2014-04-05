@@ -35,7 +35,6 @@ to reach or * for a menu of options.
     play greeting, press 1 to accept, 2 to record again
 
   * -> Press 1 to create a new mailbox
-     Press 2 to administer the system
 
   1 -> Welcome to the voicemail system. Please select a 4 digit number between 1000 and 9999.
 
