@@ -3,6 +3,7 @@ from sqlalchemy import (
     Index,
     Integer,
     Text,
+    String,
     )
 
 from sqlalchemy.ext.declarative import declarative_base
@@ -25,3 +26,9 @@ class MyModel(Base):
     value = Column(Integer)
 
 Index('my_index', MyModel.name, unique=True, mysql_length=255)
+
+class Shelter(Base):
+    __tablename__ = 'shelters'
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String(32))
