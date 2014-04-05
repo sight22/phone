@@ -16,3 +16,6 @@ Installation Instructions
 
   Visit http://yourhostname.com:6543/
 
+  https://www.temboo.com/account/applications
+  Create a new App, choose an Application name. Copy the Application Name
+  and key into phone.cfg.
