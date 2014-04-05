@@ -22,6 +22,7 @@ requires = [
     'twilio',
     'paypal',
     'sendgrid-python',
+    'webhelpers'
     ]
 
 setup(name='phone',
