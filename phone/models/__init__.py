@@ -32,3 +32,8 @@ class Shelter(Base):
 
     id = Column(Integer, primary_key=True)
     name = Column(String(32))
+    address_1 = Column(String(120))
+    address_2 = Column(String(120))
+    city = Column(String(120))
+    state = Column(String(120))
+    zip = Column(Integer)
