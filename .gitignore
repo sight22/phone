@@ -16,5 +16,6 @@
 
 *.sqlite
 
-development.ini
 phone.cfg
+cd34.ini
+qwait.ini
