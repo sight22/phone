@@ -19,17 +19,17 @@ def main(global_config, **settings):
     config.add_route('index', '/')
 
     """
-    Twillio section
+    Twilio section
     """
-    config.add_route('twillio_index', '/twillio/')
-    config.add_route('twillio_mailbox', '/twillio/mailbox')
-    config.add_route('twillio_mailbox_admin', '/twillio/mailbox_admin')
+    config.add_route('twilio_index', '/twilio/')
+    config.add_route('twilio_mailbox', '/twilio/mailbox')
+    config.add_route('twilio_mailbox_admin', '/twilio/mailbox_admin')
     # listen to active, or saved
-    config.add_route('twillio_mailbox_admin_listen',
-        '/twillio/mailbox_admin_listen')
-    config.add_route('twillio_mailbox_admin_change_greeting',
-        '/twillio/mailbox_admin_change_greeting')
-    config.add_route('twillio_create_mailbox', '/twillio/create_mailbox')
+    config.add_route('twilio_mailbox_admin_listen',
+        '/twilio/mailbox_admin_listen')
+    config.add_route('twilio_mailbox_admin_change_greeting',
+        '/twilio/mailbox_admin_change_greeting')
+    config.add_route('twilio_create_mailbox', '/twilio/create_mailbox')
 
     config.scan()
 
