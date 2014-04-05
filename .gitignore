@@ -15,3 +15,6 @@
 /dist
 
 *.sqlite
+
+development.ini
+phone.cfg
