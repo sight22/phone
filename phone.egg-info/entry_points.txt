@@ -1,5 +1,0 @@
-      [paste.app_factory]
-      main = phone:main
-      [console_scripts]
-      initialize_phone_db = phone.scripts.initializedb:main
-      
