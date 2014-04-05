@@ -6,7 +6,7 @@ from twilio import twiml
 @view_config(route_name='twilio_index')
 def index(request):
     response = twiml.Response()
-    response.enqueue("Queue Demo")
+    response.say('Welcome to Shelter Phone', voice='woman')
     return Response(str(response))
 
 @view_config(route_name='twilio_mailbox')
