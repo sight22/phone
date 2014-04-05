@@ -17,6 +17,7 @@ requires = [
     'transaction',
     'zope.sqlalchemy',
     'waitress',
+    'apex',
     'pyramid_jinja2',
     'twilio',
     'paypal',
