@@ -54,8 +54,9 @@ def process_input(request):
         if url:
             response.redirect(request.route_url(numeric), method='GET')
         else:
-            response.say(NOT_A_VALID_MAILBOX, voice=VOICE_PREFERENCE) \
-                .redirect(request.route_url('twilio_index'), method='GET')
+            response.say(NOT_A_VALID_MAILBOX, voice=VOICE_PREFERENCE)
+            response.pause(length=2)
+            response.redirect(request.route_url('twilio_index'), method='GET')
     else:
         response.say(ERROR_MESSAGE, voice=VOICE_PREFERENCE)
     return Response(str(response))
