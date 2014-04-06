@@ -9,3 +9,5 @@
 ** number of inactive accounts > 60 days that will be purged
 * ability to purge inactive accounts
 * voicemail flow completed
+
+* error if mailbox chosen already exists in create process
