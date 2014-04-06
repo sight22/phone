@@ -43,8 +43,9 @@ def main(global_config, **settings):
     config.add_route('twilio_mailbox_create_ask', '/twilio/create_mailbox_ask')
     config.add_route('twilio_mailbox_check', '/twilio/mailbox_check')
     config.add_route('twilio_mailbox_password', '/twilio/mailbox_password')
-    config.add_route('twilio_mailbox_password_verify', '/twilio/password_verify')
+    #config.add_route('twilio_mailbox_password_verify', '/twilio/password_verify')
     config.add_route('twilio_mailbox_record_greeting', '/twilio/record_greeting')
+    config.add_route('twilio_mailbox_get_greeting', '/twilio/get_greeting')
 
     config.scan()
 
