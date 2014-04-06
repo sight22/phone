@@ -31,7 +31,12 @@ def main(global_config, **settings):
         '/twilio/mailbox_admin_listen')
     config.add_route('twilio_mailbox_admin_change_greeting',
         '/twilio/mailbox_admin_change_greeting')
-    config.add_route('twilio_create_mailbox', '/twilio/create_mailbox')
+
+    config.add_route('twilio_mailbox_create_ask', '/twilio/create_mailbox_ask')
+    config.add_route('twilio_mailbox_check', '/twilio/mailbox_check')
+    config.add_route('twilio_mailbox_password', '/twilio/mailbox_password')
+    config.add_route('twilio_mailbox_password_verify', '/twilio/password_verify')
+    config.add_route('twilio_mailbox_record_greeting', '/twilio/record_greeting')
 
     config.scan()
 
