@@ -1,4 +1,10 @@
+{% extends "layout.jinja2" %}
+{% block content %}
+<a href="{{ request.route_url('apex_login') }}">Login</a>
+<a href="{{ request.route_url('apex_register') }}">Register</a>
+{% if request.user %}
 {{ request.user.get_profile(request) }}
+{% endif %}
 
 <pre>
 ShelterPhone
@@ -29,3 +35,4 @@ width: 130px; height: 34px; display: block;	margin: 0 auto;
 #twilio-connect-button:hover { background-position: 0 34px; }
 </style>
 <a href="https://www.twilio.com/authorize/CNa9fbd547aeea967ba6a4af3a5e1889ff" id="twilio-connect-button"></a>
+{% endblock %}

@@ -22,7 +22,8 @@ requires = [
     'twilio',
     'paypal',
     'sendgrid-python',
-    'webhelpers'
+    'webhelpers',
+    'mysql-python'
     ]
 
 setup(name='phone',

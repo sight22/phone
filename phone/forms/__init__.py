@@ -5,6 +5,9 @@ from wtforms import TextField
 from wtforms import SelectField
 from wtforms import validators
 
+from phone.models import DBSession
+from phone.models import Shelter
+
 from apex.forms import RegisterForm as ApexRegisterForm
 
 class RegisterForm(ApexRegisterForm):
@@ -17,4 +20,15 @@ class RegisterForm(ApexRegisterForm):
     zip = IntegerField('Zip', validators=[validators.Required()])
 
     def after_signup(self, user, **kwargs):
-        pass
+        profile = Shelter(auth_id=user.id)
+        profile.name = self.shelter_name.data
+        profile.address_1 = self.address_1.data
+        if self.address_2:
+            profile.address_2 = self.address_2.data
+        profile.city = self.city.data
+        profile.state = self.state.data
+        profile.zip = self.zip.data
+
+        DBSession.add(profile)
+        DBSession.flush()
+
