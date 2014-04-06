@@ -21,6 +21,8 @@ from sqlalchemy.orm import (
     synonym,
     )
 
+from sqlalchemy.types import TIMESTAMP
+
 from sqlalchemy.schema import ForeignKey
 
 #from zope.sqlalchemy import ZopeTransactionExtension
@@ -100,5 +102,5 @@ class MailboxContent(Base):
     shelter_phone = Column(Unicode(24))
     mailbox = Column(Integer)
     url = Column(String(120))
-    timestamp = Column(Timestamp)
+    timestamp = Column(TIMESTAMP)
     seen_saved = Column(Unicode(1))

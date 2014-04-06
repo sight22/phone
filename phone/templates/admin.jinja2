@@ -1,4 +1,26 @@
 {% extends "layout.jinja2" %}
 {% block content %}
-f
+<div class="row">
+  <div class="col-lg-6">
+    <h2>Message Count</h2>
+    {% for message, count in message_count %}
+      <p>{{ message.shelter_phone }} - {{ message.mailbox }} {{ count }}</p>
+    {% endfor %}
+  </div>
+
+  <div class="col-lg-6">
+    <h2>Old Messages</h2>
+    {% for message in old_messages %}
+      <p>{{ message.shelter_phone }} - {{ message.mailbox }}</p>
+    {% endfor %}
+  </div>
+</div>
+
+<hr />
+
+<div class="row">
+  <div class="col-lg-12">
+    <a href="#" class="btn btn-primary pull-right">Email This Report</a>
+  </div>
+</div>
 {% endblock %}

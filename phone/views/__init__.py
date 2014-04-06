@@ -3,13 +3,17 @@ from pyramid.view import view_config
 
 from apex.lib.db import merge_session_with_post
 
+from sqlalchemy import func
+
 from phone.forms import ProfileForm
 
 from phone.models import DBSession
 from phone.models import Shelter
+from phone.models import MailboxContent
 
 from phone.libs.libphone import get_phones
 from phone.libs.libphone import buy_number
+from phone.libs.libphone import send_mail
 
 @view_config(route_name='index', renderer='index.jinja2')
 def index(request):
@@ -69,4 +73,14 @@ def twc_authorize(request):
 
 @view_config(route_name='admin', renderer='admin.jinja2', permission='authenticated')
 def admin(request):
-  return {}
+    message_count = DBSession.query(MailboxContent, func.count(MailboxContent.mailbox)).group_by(MailboxContent.mailbox).all()
+    old_messages = DBSession.query(MailboxContent).filter(MailboxContent.timestamp <= '2014-02-06 00:00:00').group_by(MailboxContent.mailbox).all()
+
+    if request.method == 'POST': 
+        if 'email' in request.POST:
+            send_mail('Admin Report', None, request.POST['email'])
+            return HTTPFound(location=request.route_url('admin'))
+        else:
+            return HTTPFound(location=request.route_url('admin'))
+
+    return {'message_count': message_count, 'old_messages': old_messages}
