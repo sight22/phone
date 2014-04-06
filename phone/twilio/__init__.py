@@ -15,10 +15,12 @@ by the pound symbol, or, hit star for the menu.
 """
 
 CREATE_A_MAILBOX = """Please select a four digit mailbox number between
-1000 and 9999"""
+1000 and 9999 followed by the pound symbol"""
 
 MAILBOX_CREATED = """Your mailbox has been created, please select a four
-digit passcode"""
+to eight digit passcode followed by the pound symbol"""
+
+MAILBOX_IN_USE = """I'm sorry, that mailbox is already in use, please try again"""
 
 NOT_A_VALID_MAILBOX = """I'm sorry, that is not a valid mailbox"""
 
@@ -26,7 +28,8 @@ ERROR_MESSAGE = """A system error has occurred"""
 
 VOICE_PREFERENCE = 'woman'
 
-is_a_mailbox = re.compile('[1-9]\d{3,}')
+is_a_mailbox = re.compile('^[1-9]\d{3,}$')
+valid_passcode = re.compile('^\d{4,8}$')
 
 @view_config(route_name='twilio_index')
 def index(request):
@@ -65,6 +68,13 @@ def process_input(request):
         response.say(ERROR_MESSAGE, voice=VOICE_PREFERENCE)
     return Response(str(response))
 
+@view_config(route_name='twilio_process_password')
+def process_password(request):
+    digits = request.params['Digits']
+    response.redirect(request.route_url(numeric,
+        _query={'Digits':digits}), method='GET')
+    return Response(str(response))
+
 @view_config(route_name='twilio_mailbox')
 def mailbox(request):
     print request.matched_route.name
@@ -98,13 +108,6 @@ def listen(request):
 
 @view_config(route_name='twilio_mailbox_create_ask')
 def mailbox_create_ask(request):
-    """
-    1) ask for 4 digits
-    2) see if they already exist
-    3) if yes, try again
-    4) if no, ask to select and verify password
-    5) record greeting
-    """
     print request.matched_route.name
     print request.params
     response = twiml.Response()
@@ -117,6 +120,7 @@ def mailbox_create_ask(request):
 
 @view_config(route_name='twilio_mailbox_check')
 def mailbox_check(request):
+    print request.matched_route.name
     print request.params
     digits = request.params['Digits']
     url = get_mailbox_url(digits)
@@ -127,8 +131,14 @@ def mailbox_check(request):
             action=request.route_url('twilio_process_input',
             star=None,
             numeric='twilio_mailbox_password'),
-            _query={'number':digits}) \
+            _query={'number':digits, 'password':True}) \
             .say(MAILBOX_CREATED, voice=VOICE_PREFERENCE)
+    else:
+        response.gather(method='GET',
+            action=request.route_url('twilio_process_input',
+            star=None,
+            numeric='twilio_mailbox_check', _query={'create':True})) \
+            .say(CREATE_A_MAILBOX, voice=VOICE_PREFERENCE)
     return Response(str(response))
 
 @view_config(route_name='twilio_mailbox_password')
