@@ -18,6 +18,7 @@
                    <form action="" method="POST">
                      <button type="submit" class="btn btn-primary">Buy Now</button>
                      <input type="hidden" name="number" value="{{ number.phone_number }}" />
+                     {{ csrf_token_field| safe }}
                    </form>
                 </td>
               </tr>

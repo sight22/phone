@@ -44,7 +44,9 @@ def twilio_buy_number(request):
     if request.user.get_profile(request).twilio_sid is None:
       return HTTPFound(location=request.route_url('connect'))
 
-    if request.method == "POST":
+    if request.method == 'POST':
+        if 'number' not in request.POST:
+            return HTTPFound(location=request.route_url('twilio_buy_number'))
         print request.POST
 
     profile = request.user.get_profile(request)
