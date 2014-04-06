@@ -10,8 +10,6 @@ from phone.models import Shelter
 
 from apex.forms import ExtendedForm
 
-from apex.lib.form import StyledWidget
-
 class ProfileForm(ExtendedForm):
     name = TextField('Shelter Name', validators=[validators.Required()])
     address_1 = TextField('Address 1', validators=[validators.Required()])
