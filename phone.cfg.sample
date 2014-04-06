@@ -1,3 +1,9 @@
 [temboo]
-APP_KEY_NAME =
-APP_KEY_VALUE =
+APP_KEY_NAME = 
+APP_KEY_VALUE = 
+[twilio]
+account_sid = 
+auth_token = 
+[sendgrid]
+default_from = 
+
