@@ -180,26 +180,22 @@ def mailbox_password_verify(request):
 
 @view_config(route_name='twilio_mailbox_record_greeting')
 def mailbox_record_greeting(request):
-    print request.matched_route.name
-    print request.params
     digits = request.params['Digits']
     mailbox = request.params['mailbox']
     response = twiml.Response()
     response.say(PLEASE_RECORD_YOUR_GREETING, voice=VOICE_PREFERENCE)
     response.record(action=request.route_url('twilio_mailbox_get_greeting',
-        _query={'Digits':digits, mailbox:mailbox}), maxLength=60, method='GET')
+        _query={'Digits':digits, 'mailbox':mailbox}), maxLength=60, method='GET')
     response.say(DIDNT_HEAR_RECORDING, voice=VOICE_PREFERENCE)
     response.redirect(action=request.route_url('twilio_mailbox_get_greeting',
-        _query={'Digits':digits, mailbox:mailbox}), method='GET')
+        _query={'Digits':digits, 'mailbox':mailbox}), method='GET')
     return Response(str(response))
 
 @view_config(route_name='twilio_mailbox_get_greeting')
 def mailbox_get_greeting(request):
-    print request.matched_route.name
-    print request.params
     digits = request.params['Digits']
     mailbox = request.params['mailbox']
     response = twiml.Response()
-    response.say(THANK_YOU.format(number='a', mailbox='b'), 
+    response.say(THANK_YOU.format(number=digits, mailbox=mailbox),
         voice=VOICE_PREFERENCE)
     return Response(str(response))
