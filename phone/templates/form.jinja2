@@ -1,6 +1,5 @@
 {% macro render(form) %}
     {% for field in form.visible_fields() %}
-      {% if field.type == 'TextField' %}
         <div class="form-group{% if field.errors|length >= 1 %} has-error{% endif %}">
           {%- if field.flags.required %}
              <label class="col-sm-2 control-label" for="{{ field.name }}">{{ field.label.text }} <span class="text-danger">*</span></label>
@@ -8,7 +7,9 @@
              <label class="col-sm-2 control-label" for="{{ field.name }}">{{ field.label.text }} &nbsp;</label>
           {% endif %}
           <div class="col-sm-10">
-          {{ field(class_='form-control') }}
+          {% if field.type in ['TextField', 'IntegerField', 'SelectField'] %}
+            {{ field(class_='form-control') }}
+          {% endif %}
 
           {%- if field.errors %}
             {% for error in field.errors %}
@@ -17,6 +18,5 @@
           {% endif %}
           </div>
         </div>
-      {% endif %}
     {% endfor %}
 {% endmacro %}
