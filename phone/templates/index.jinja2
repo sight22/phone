@@ -1,10 +1,8 @@
 {% extends "layout.jinja2" %}
 {% block content %}
 
-{{ request.user }}
-
 {% if request.user %}
-{{ request.user.get_profile(request) }}
+{{ request.user }}
 {% else %}
 <a href="{{ request.route_url('apex_login') }}">Login</a>
 <a href="{{ request.route_url('apex_register') }}">Register</a>
