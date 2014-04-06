@@ -10,7 +10,11 @@ the four digit extension of the person you're trying to reach followed
 by the pound symbol, or, hit star for the menu.
 """
 
+NOT_A_VALID_MAILBOX = """I'm sorry, that is not a valid mailbox"""
+
 ERROR_MESSAGE = """A system error has occurred"""
+
+VOICE_PREFERENCE = 'woman'
 
 is_a_mailbox = re.compile('[1-9]\d{3,}')
 
@@ -21,7 +25,7 @@ def index(request):
         action=request.route_url('twilio_process_input',
         star='twilio_create_mailbox',
         numeric='twilio_mailbox')) \
-        .say(WELCOME_MESSAGE, voice='woman', loop=2)
+        .say(WELCOME_MESSAGE, voice=VOICE_PREFERENCE, loop=2)
     return Response(str(response))
 
 """
@@ -38,15 +42,25 @@ def process_input(request):
     if digits == '*':
         response.redirect(request.route_url(star), method='GET')
     elif is_a_mailbox.match(digits):
-        response.redirect(request.route_url(numeric), method='GET')
+        if True:
+            response.redirect(request.route_url(numeric), method='GET')
+        else:
+            response.say(NOT_A_VALID_MAILBOX, voice=VOICE_PREFERENCE) \
+                .redirect(request.route_url('twilio_index'), method='GET')
     else:
-        response.say(ERROR_MESSAGE, voice='woman')
+        response.say(ERROR_MESSAGE, voice=VOICE_PREFERENCE)
     return Response(str(response))
+
+"""
+mailbox number
+greeting_url
+"""
 
 @view_config(route_name='twilio_mailbox')
 def mailbox(request):
     print request.matched_route.name
     print request.params
+    # if mailbox url, if not, play setup instructions
     response = twiml.Response()
     response.enqueue("Queue Demo")
     return Response(str(response))

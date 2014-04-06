@@ -35,3 +35,10 @@ class Shelter(Base):
     zip = Column(Integer)
 
     #user = relationship(AuthID, backref=backref('profile', uselist=False))
+
+class MailboxGreeting(Base):
+    __tablename__ = 'mailbox_greetings'
+
+    id = Column(Integer, primary_key=True)
+    mailbox = Column(Integer)
+    url = Column(String(120))
