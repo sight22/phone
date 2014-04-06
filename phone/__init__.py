@@ -20,6 +20,9 @@ def main(global_config, **settings):
     config.add_route('profile', '/profile', permission='authenticated')
     config.add_route('connect', '/connect', permission='authenticated')
 
+    config.add_route('twc_authorize', '/twilio/authorize', permission='authenticated')
+    config.add_route('twc_deauthorize', '/twilio/deauthorize')
+
     """
     Twilio section
     """

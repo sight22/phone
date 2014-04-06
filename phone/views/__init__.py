@@ -34,3 +34,12 @@ def profile(request):
 @view_config(route_name='connect', renderer='connect.jinja2')
 def connect(request):
     return {}
+
+@view_config(route_name='twc_authorize')
+def twc_authorize(request):
+    if 'AccountSid' in request.params:
+        profile = request.user.get_profile(request)
+        profile.twilio_sid = request.params['AccountSid']
+        DBSession.merge(profile)
+        DBSession.flush()
+        return HTTPFound(location=request.route_url('index'))
