@@ -16,7 +16,7 @@ def index(request):
 def profile(request):
     record = DBSession.query(Shelter).filter(Shelter.auth_id==request.user.id).first()
     if record is None:
-      record = Shelter()
+      record = Shelter(auth_id=request.user.id)
 
     form = ProfileForm(request.POST, obj=record)
 
