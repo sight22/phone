@@ -48,6 +48,7 @@ class MailboxGreeting(Base):
     __tablename__ = 'mailbox_greetings'
 
     id = Column(Integer, primary_key=True)
+    shelter_phone = Column(Unicode(24))
     mailbox = Column(Integer)
     url = Column(String(120))
     salt = Column(Unicode(24))
