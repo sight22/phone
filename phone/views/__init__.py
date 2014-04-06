@@ -33,6 +33,14 @@ def profile(request):
 
 @view_config(route_name='connect', renderer='connect.jinja2')
 def connect(request):
+    if request.user.get_profile(request).twilio_sid is not None:
+      return HTTPFound(location=request.route_url('index'))
+    return {}
+
+@view_config(route_name='twilio_buy_number', renderer='twilio_buy_number.jinja2')
+def twilio_buy_number(request):
+    if request.user.get_profile(request).twilio_sid is None:
+      return HTTPFound(location=request.route_url('connect'))
     return {}
 
 @view_config(route_name='twc_authorize')

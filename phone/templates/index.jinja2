@@ -1,5 +1,33 @@
 {% extends "layout.jinja2" %}
 {% block content %}
+{% if request.user %}
+  {% if request.user.get_profile(request).twilio_sid %}
+    {% if not request.user.get_profile(request).twilio_number %}
+      <div class="row">
+        <div class="alert alert-info col-lg-6 col-lg-offset-3">
+          <h3 style="margin-top: 0px;">You need a Twilio number!</h3>
+          <a href="{{ request.route_url('twilio_buy_number') }}">Buy a Twilio Number</a>
+        </div>
+      </div>
+    {% endif %}
+  {% else %}
+    <div class="row">
+      <div class="alert alert-info col-lg-6 col-lg-offset-3">
+        <h3>Unconnected Twilio Account</h3>
+        <p>Please connect your Twilio account.</p>
+        <style type="text/css">
+          #twilio-connect-button {
+            background: url(https://www.twilio.com/packages/connect-apps/images/connect-button.png);
+            width: 130px; height: 34px; display: block;     margin: 0 auto;
+            }
+            #twilio-connect-button:hover { background-position: 0 34px; }
+        </style>
+        <a href="https://www.twilio.com/authorize/CNa9fbd547aeea967ba6a4af3a5e1889ff" id="twilio-connect-bu
+tton"></a>
+      </div>
+    </div>
+  {% endif %}
+{% endif %}
 <pre>
 ShelterPhone
 
@@ -21,12 +49,4 @@ pick one, prepopulate number with our twimlet address
 Admin shows link to twilio to refresh account
 shows voicemail statistics
 
-<style type="text/css">
-#twilio-connect-button {
-background: url(https://www.twilio.com/packages/connect-apps/images/connect-button.png);
-width: 130px; height: 34px; display: block;	margin: 0 auto;
-}
-#twilio-connect-button:hover { background-position: 0 34px; }
-</style>
-<a href="https://www.twilio.com/authorize/CNa9fbd547aeea967ba6a4af3a5e1889ff" id="twilio-connect-button"></a>
 {% endblock %}

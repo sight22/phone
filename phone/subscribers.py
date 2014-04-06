@@ -13,4 +13,6 @@ def is_profile_setup(event):
       profile = request.user.get_profile(request)
 
       if profile is None and request.matched_route.name != 'profile':
-         raise HTTPFound(location=request.route_url('profile')) 
+         raise HTTPFound(location=request.route_url('profile'))
+      elif profile.paypal_email is None and request.matched_route.name != 'profile':
+         raise HTTPFound(location=request.route_url('profile'))

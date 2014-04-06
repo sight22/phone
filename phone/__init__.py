@@ -21,7 +21,8 @@ def main(global_config, **settings):
     config.add_route('connect', '/connect', permission='authenticated')
 
     config.add_route('twc_authorize', '/twilio/authorize', permission='authenticated')
-    config.add_route('twc_deauthorize', '/twilio/deauthorize')
+    config.add_route('twc_deauthorize', '/twilio/deauthorize', permission='authenticated')
+    config.add_route('twilio_buy_number', '/twilio/number', permission='authenticated')
 
     """
     Twilio section
