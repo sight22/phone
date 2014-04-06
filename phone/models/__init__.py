@@ -19,11 +19,12 @@ from sqlalchemy.orm import (
 
 from sqlalchemy.schema import ForeignKey
 
-from zope.sqlalchemy import ZopeTransactionExtension
+#from zope.sqlalchemy import ZopeTransactionExtension
 
 from apex.models import AuthID
 
-DBSession = scoped_session(sessionmaker(extension=ZopeTransactionExtension()))
+#DBSession = scoped_session(sessionmaker(extension=ZopeTransactionExtension()))
+DBSession = scoped_session(sessionmaker())
 Base = declarative_base()
 
 

@@ -8,11 +8,14 @@ from phone.forms import ProfileForm
 from phone.models import DBSession
 from phone.models import Shelter
 
+from phone.libs.libphone import get_phones
+from phone.libs.libphone import buy_number
+
 @view_config(route_name='index', renderer='index.jinja2')
 def index(request):
     return {}
 
-@view_config(route_name='profile', renderer='profile.jinja2')
+@view_config(route_name='profile', renderer='profile.jinja2', permission='authenticated')
 def profile(request):
     record = DBSession.query(Shelter).filter(Shelter.auth_id==request.user.id).first()
     if record is None:
@@ -28,18 +31,18 @@ def profile(request):
         else:
             DBSession.add(record)
         DBSession.flush()
-        raise HTTPFound(location=request.route_url('index'))
+        #raise HTTPFound(location=request.route_url('index'))
+        raise HTTPFound(location=request.route_url('profile'))
     return {'form': form}
 
-@view_config(route_name='connect', renderer='connect.jinja2')
+@view_config(route_name='connect', renderer='connect.jinja2', permission='authenticated')
 def connect(request):
     if request.user.get_profile(request).twilio_sid is not None:
       return HTTPFound(location=request.route_url('index'))
     return {}
 
-from phone.libs.libphone import get_phones
-
-@view_config(route_name='twilio_buy_number', renderer='twilio_buy_number.jinja2')
+@view_config(route_name='twilio_buy_number', renderer='twilio_buy_number.jinja2',
+    permission='authenticated')
 def twilio_buy_number(request):
     if request.user.get_profile(request).twilio_sid is None:
       return HTTPFound(location=request.route_url('connect'))
@@ -54,7 +57,7 @@ def twilio_buy_number(request):
 
     return {'numbers': numbers}
 
-@view_config(route_name='twc_authorize')
+@view_config(route_name='twc_authorize', permission='authenticated')
 def twc_authorize(request):
     if 'AccountSid' in request.params:
         profile = request.user.get_profile(request)

@@ -4,6 +4,7 @@ import os
 from temboo.core.session import TembooSession
 from temboo.Library.Google.Geocoding import GeocodeByAddress
 from temboo.Library.Twilio.AvailablePhoneNumbers import LocalList
+from temboo.Library.Twilio.IncomingPhoneNumbers import AddPhoneNumber
 
 def get_phones(addr1, city, state, zip):
     config = ConfigParser.ConfigParser()
@@ -37,3 +38,23 @@ def get_phones(addr1, city, state, zip):
     numbers = TwilioResults.getJSONFromString(TwilioResults.get_Response())
 
     return numbers['available_phone_numbers']
+
+def buy_number(account_sid, number):
+    config = ConfigParser.ConfigParser()
+    config.readfp(open(os.path.join('/', os.path.dirname(os.path.dirname(
+        os.path.dirname(os.path.join(os.path.abspath(__file__))))), 'phone.cfg')))
+
+    session = TembooSession('cd34', config.get('temboo', 'APP_KEY_NAME'),
+        config.get('temboo', 'APP_KEY_VALUE'))
+
+    addPhoneNumberChoreo = AddPhoneNumber(session)
+    addPhoneNumberInputs = addPhoneNumberChoreo.new_input_set()
+
+    addPhoneNumberInputs.set_AuthToken(config.get('twilio', 'auth_token'))
+    addPhoneNumberInputs.set_AccountSID(account_sid)
+
+    addPhoneNumberResults = addPhoneNumberChoreo.execute_with_results(addPhoneNumberInputs)
+
+    print addPhoneNumberResults
+
+    return addPhoneNumberResults

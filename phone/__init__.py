@@ -17,12 +17,12 @@ def main(global_config, **settings):
 
     config.add_static_view('static', 'static', cache_max_age=3600)
     config.add_route('index', '/')
-    config.add_route('profile', '/profile', permission='authenticated')
-    config.add_route('connect', '/connect', permission='authenticated')
+    config.add_route('profile', '/profile')
+    config.add_route('connect', '/connect')
 
-    config.add_route('twc_authorize', '/twilio/authorize', permission='authenticated')
-    config.add_route('twc_deauthorize', '/twilio/deauthorize', permission='authenticated')
-    config.add_route('twilio_buy_number', '/twilio/number', permission='authenticated')
+    config.add_route('twc_authorize', '/twilio/authorize')
+    config.add_route('twc_deauthorize', '/twilio/deauthorize')
+    config.add_route('twilio_buy_number', '/twilio/number')
 
     """
     Twilio section
