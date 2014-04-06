@@ -18,21 +18,3 @@ class ProfileForm(ExtendedForm):
     state = SelectField('State', choices=constants.us_states(),
       validators=[validators.Required()])
     zip = IntegerField('Zip', validators=[validators.Required()])
-
-
-"""
-class RegisterForm(ApexRegisterForm):
-
-    def after_signup(self, user, **kwargs):
-        profile = Shelter(auth_id=user.id)
-        profile.name = self.shelter_name.data
-        profile.address_1 = self.address_1.data
-        if self.address_2:
-            profile.address_2 = self.address_2.data
-        profile.city = self.city.data
-        profile.state = self.state.data
-        profile.zip = self.zip.data
-
-        DBSession.add(profile)
-        DBSession.flush()
-"""

@@ -1,6 +1,12 @@
+from pyramid.httpexceptions import HTTPFound
 from pyramid.view import view_config
 
+from apex.lib.db import merge_session_with_post
+
 from phone.forms import ProfileForm
+
+from phone.models import DBSession
+from phone.models import Shelter
 
 @view_config(route_name='index', renderer='index.jinja2')
 def index(request):
@@ -8,8 +14,13 @@ def index(request):
 
 @view_config(route_name='profile', renderer='profile.jinja2')
 def profile(request):
-    form = ProfileForm(request.POST)
+    record = Shelter()
+    form = ProfileForm(request.POST, obj=record)
 
     if request.method == 'POST' and form.validate():
-        print request.POST
+        record = merge_session_with_post(record, request.POST.items())
+        record.auth_id = request.user.id
+        DBSession.merge(record)
+        DBSession.flush()
+        raise HTTPFound(location=request.route_url('index'))
     return {'form': form}
