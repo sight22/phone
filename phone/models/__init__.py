@@ -38,6 +38,7 @@ class Shelter(Base):
     city = Column(String(120))
     state = Column(String(120))
     zip = Column(Integer)
+    paypal_email = Column(String(120))
 
     user = relationship(AuthID, backref=backref('profile', uselist=False))
 
