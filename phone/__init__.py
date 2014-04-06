@@ -19,6 +19,7 @@ def main(global_config, **settings):
     config.add_route('index', '/')
     config.add_route('profile', '/profile')
     config.add_route('connect', '/connect')
+    config.add_route('admin', '/admin')
 
     config.add_route('twc_authorize', '/twilio/authorize')
     config.add_route('twc_deauthorize', '/twilio/deauthorize')

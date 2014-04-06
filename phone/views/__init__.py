@@ -66,3 +66,7 @@ def twc_authorize(request):
         DBSession.merge(profile)
         DBSession.flush()
         return HTTPFound(location=request.route_url('index'))
+
+@view_config(route_name='admin', renderer='admin.jinja2', permission='authenticated')
+def admin(request):
+  return {}
