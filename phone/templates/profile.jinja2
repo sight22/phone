@@ -1,9 +1,14 @@
 {% extends "layout.jinja2" %}
+{% import "form.jinja2" as forms %}
 {% block content %}
 <div class="row">
-  <div class="col-lg-span-12">
+  <div class="col-lg-8 col-lg-offset-2">
     <h1>Profile</h1>
-    {{ form.render() | safe }}
+    <form action="" method="POST" class="form-horizontal">
+      {{ forms.render(form) }}
+      {{ csrf_token_field | safe }}
+      <button type="submit" class="btn btn-primary pull-right">Submit</button>
+    </form>
   </div>
 </div>
 {% endblock %}

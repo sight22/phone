@@ -13,8 +13,8 @@
   {% else %}
     <div class="row">
       <div class="alert alert-info col-lg-6 col-lg-offset-3">
-        <h3>Unconnected Twilio Account</h3>
-        <p>Please connect your Twilio account.</p>
+        <h3 style="margin-top: 0px;">Unconnected Twilio Account</h3>
+        <br />
         <style type="text/css">
           #twilio-connect-button {
             background: url(https://www.twilio.com/packages/connect-apps/images/connect-button.png);
@@ -22,31 +22,33 @@
             }
             #twilio-connect-button:hover { background-position: 0 34px; }
         </style>
-        <a href="https://www.twilio.com/authorize/CNa9fbd547aeea967ba6a4af3a5e1889ff" id="twilio-connect-bu
-tton"></a>
+        <a href="https://www.twilio.com/authorize/CNa9fbd547aeea967ba6a4af3a5e1889ff" id="twilio-connect-button"></a>
+        <p class="text-center">Please connect your Twilio account.</p>
       </div>
     </div>
   {% endif %}
 {% endif %}
-<pre>
-ShelterPhone
 
-front page shows list of homeless shelters currently registered
-
-Create Account:
-Username
-Password:
-Email Address
-Shelter Name:
-Phone Number:
-Address
-City/State/Zip
-
-After registration
-Use shelter phone number, pick 10 numbers from twilio with same area code
-pick one, prepopulate number with our twimlet address
-
-Admin shows link to twilio to refresh account
-shows voicemail statistics
-
+{% if shelters %}
+  <div class="row">
+    <div class="col-lg-8 col-lg-offset-2">
+      <h2>Shelters</h2>
+      <table class="table table-striped">
+        <thead>
+        </thead>
+        <tbody>
+          {% for shelter in shelters %}
+            <tr>
+              <td>{{ shelter.name }}</td>
+              <td>{{ shelter.twilio_number }}</td>
+              <td>
+                <script src="https://www.paypalobjects.com/js/external/paypal-button.min.js?merchant={{ shelter.paypal_email }}" data-button="donate" data-name="Donate" data-callback="http://phone.cd34.com:6542/paypal"></script>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+{% endif %}
 {% endblock %}

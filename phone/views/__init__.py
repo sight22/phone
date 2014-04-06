@@ -13,7 +13,8 @@ from phone.libs.libphone import buy_number
 
 @view_config(route_name='index', renderer='index.jinja2')
 def index(request):
-    return {}
+    shelters = DBSession.query(Shelter).all()
+    return {'shelters': shelters}
 
 @view_config(route_name='profile', renderer='profile.jinja2', permission='authenticated')
 def profile(request):

@@ -1,0 +1,22 @@
+{% macro render(form) %}
+    {% for field in form.visible_fields() %}
+      {% if field.type == 'TextField' %}
+        <div class="form-group{% if field.errors|length >= 1 %} has-error{% endif %}">
+          {%- if field.flags.required %}
+             <label class="col-sm-2 control-label" for="{{ field.name }}">{{ field.label.text }} <span class="text-danger">*</span></label>
+          {% else %}
+             <label class="col-sm-2 control-label" for="{{ field.name }}">{{ field.label.text }} &nbsp;</label>
+          {% endif %}
+          <div class="col-sm-10">
+          {{ field(class_='form-control') }}
+
+          {%- if field.errors %}
+            {% for error in field.errors %}
+              <span class="help-block text-warning">{{ error }}</span>
+            {% endfor %}
+          {% endif %}
+          </div>
+        </div>
+      {% endif %}
+    {% endfor %}
+{% endmacro %}
