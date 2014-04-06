@@ -1,0 +1,9 @@
+{% extends "layout.jinja2" %}
+{% block content %}
+<div class="row">
+  <div class="col-lg-span-12">
+    <h1>Profile</h1>
+    {{ form.render() | safe }}
+  </div>
+</div>
+{% endblock %}

@@ -8,10 +8,9 @@ from wtforms import validators
 from phone.models import DBSession
 from phone.models import Shelter
 
-from apex.forms import RegisterForm as ApexRegisterForm
+from apex.forms import ExtendedForm
 
-"""
-class RegisterForm(ApexRegisterForm):
+class ProfileForm(ExtendedForm):
     shelter_name = TextField('Shelter Name', validators=[validators.Required()])
     address_1 = TextField('Address 1', validators=[validators.Required()])
     address_2 = TextField('Address 2')
@@ -19,6 +18,10 @@ class RegisterForm(ApexRegisterForm):
     state = SelectField('State', choices=constants.us_states(),
       validators=[validators.Required()])
     zip = IntegerField('Zip', validators=[validators.Required()])
+
+
+"""
+class RegisterForm(ApexRegisterForm):
 
     def after_signup(self, user, **kwargs):
         profile = Shelter(auth_id=user.id)
