@@ -22,6 +22,8 @@ def main(global_config, **settings):
     Twilio section
     """
     config.add_route('twilio_index', '/twilio/')
+    config.add_route('twilio_process_input',
+        '/twilio/process_input/:star/:numeric')
     config.add_route('twilio_mailbox', '/twilio/mailbox')
     config.add_route('twilio_mailbox_admin', '/twilio/mailbox_admin')
     # listen to active, or saved
