@@ -17,10 +17,13 @@ from sqlalchemy.orm import (
 
 from sqlalchemy.schema import ForeignKey
 
+from zope.sqlalchemy import ZopeTransactionExtension
+
 from apex.models import AuthID
 
-DBSession = scoped_session(sessionmaker(autocommit=True))
+DBSession = scoped_session(sessionmaker(extension=ZopeTransactionExtension()))
 Base = declarative_base()
+
 
 class Shelter(Base):
     __tablename__ = 'shelters'
@@ -34,7 +37,7 @@ class Shelter(Base):
     state = Column(String(120))
     zip = Column(Integer)
 
-    #user = relationship(AuthID, backref=backref('profile', uselist=False))
+    user = relationship(AuthID, backref=backref('profile', uselist=False))
 
 class MailboxGreeting(Base):
     __tablename__ = 'mailbox_greetings'

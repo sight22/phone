@@ -10,6 +10,7 @@ from phone.models import Shelter
 
 from apex.forms import RegisterForm as ApexRegisterForm
 
+"""
 class RegisterForm(ApexRegisterForm):
     shelter_name = TextField('Shelter Name', validators=[validators.Required()])
     address_1 = TextField('Address 1', validators=[validators.Required()])
@@ -31,4 +32,4 @@ class RegisterForm(ApexRegisterForm):
 
         DBSession.add(profile)
         DBSession.flush()
-
+"""
