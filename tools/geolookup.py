@@ -30,6 +30,7 @@ localListInputs.set_AccountSID(config.get('twilio', 'account_sid'))
 localListInputs.set_Latitude(latitude)
 localListInputs.set_Longitude(longitude)
 localListInputs.set_Distance(10)
+localListInputs.set_PageSize(10)
 
 TwilioResults = localListChoreo.execute_with_results(localListInputs)
 numbers = TwilioResults.getJSONFromString(TwilioResults.get_Response())
