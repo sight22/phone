@@ -22,6 +22,11 @@ to eight digit passcode followed by the pound symbol"""
 
 MAILBOX_IN_USE = """I'm sorry, that mailbox is already in use, please try again"""
 
+PLEASE_RECORD_YOUR_GREETING = """At the tone, please record your greeting"""
+
+THANK_YOU = """Thank you, your account has been created. The phone number
+for your mailbox is {number} and your extension is {mailbox}"""
+
 NOT_A_VALID_MAILBOX = """I'm sorry, that is not a valid mailbox"""
 
 ERROR_MESSAGE = """A system error has occurred"""
@@ -133,7 +138,7 @@ def mailbox_check(request):
         response.gather(method='GET',
             action=request.route_url('twilio_process_password',
             mailbox=digits,
-            numeric='twilio_mailbox_password')) \
+            numeric='twilio_mailbox_record_greeting')) \
             .say(MAILBOX_CREATED, voice=VOICE_PREFERENCE)
     else:
         response.gather(method='GET',
@@ -149,16 +154,15 @@ def mailbox_password(request):
     print request.params
     digits = request.params['Digits']
     mailbox = request.params['mailbox']
-    url = get_mailbox_url(mailbox)
-    if url is None:
-        response = twiml.Response()
-        response.gather(method='GET',
-            action=request.route_url('twilio_mailbox_record_greeting',
-            mailbox=digits,
-            numeric='twilio_mailbox_password_verify')) \
-            .say(MAILBOX_CREATED, voice=VOICE_PREFERENCE)
+    response = twiml.Response()
+    response.gather(method='GET',
+        action=request.route_url('twilio_mailbox_record_greeting',
+        mailbox=digits,
+        numeric='twilio_mailbox_record_greeting')) \
+        .say(MAILBOX_CREATED, voice=VOICE_PREFERENCE)
     return Response(str(response))
 
+"""
 @view_config(route_name='twilio_mailbox_password_verify')
 def mailbox_password_verify(request):
     url = get_mailbox_url(digits)
@@ -170,13 +174,27 @@ def mailbox_password_verify(request):
             numeric='twilio_mailbox_record_greeting')) \
             .say(MAILBOX_CREATED, voice=VOICE_PREFERENCE)
     return Response(str(response))
+"""
 
 @view_config(route_name='twilio_mailbox_record_greeting')
 def mailbox_record_greeting(request):
     print request.matched_route.name
     print request.params
-    #url = get_mailbox_url(digits)
+    digits = request.params['Digits']
+    mailbox = request.params['mailbox']
     response = twiml.Response()
-    response.enqueue("Queue Demo")
+    response.say(PLEASE_RECORD_YOUR_GREETING, voice=VOICE_PREFERENCE)
+    response.record(action=request.route_url('twilio_mailbox_get_greeting',
+        _query={'Digits':digits, mailbox:mailbox}), playBeep=True, method='GET')
     return Response(str(response))
 
+@view_config(route_name='twilio_mailbox_get_greeting')
+def mailbox_get_greeting(request):
+    print request.matched_route.name
+    print request.params
+    digits = request.params['Digits']
+    mailbox = request.params['mailbox']
+    response = twiml.Response()
+    response.say(THANK_YOU.format(number='a', mailbox='b'), 
+        voice=VOICE_PREFERENCE)
+    return Response(str(response))
