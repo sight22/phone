@@ -4,15 +4,17 @@ from sqlalchemy import (
     Integer,
     Text,
     String,
+    Unicode,
     )
 
 from sqlalchemy.ext.declarative import declarative_base
 
 from sqlalchemy.orm import (
+    backref,
+    relationship,
     scoped_session,
     sessionmaker,
-    relationship,
-    backref
+    synonym,
     )
 
 from sqlalchemy.schema import ForeignKey
@@ -45,3 +47,39 @@ class MailboxGreeting(Base):
     id = Column(Integer, primary_key=True)
     mailbox = Column(Integer)
     url = Column(String(120))
+    salt = Column(Unicode(24))
+    _password = Column('password', Unicode(80), default=u'')
+
+    def _set_password(self, password):
+        self.salt = self.get_salt(24)
+        password = password + self.salt
+        self._password = BCRYPTPasswordManager().encode(password, rounds=12)
+
+    def _get_password(self):
+        return self._password
+
+    password = synonym('_password', descriptor=property(_get_password, \
+                       _set_password))
+
+    def get_salt(self, length):
+        m = hashlib.sha256()
+        word = ''
+
+        for i in xrange(length):
+            word += random.choice(string.ascii_letters)
+
+        m.update(word)
+
+        return unicode(m.hexdigest()[:length])
+
+    @classmethod
+    def check_password(cls, **kwargs):
+        if kwargs.has_key('id'):
+            user = cls.get_by_id(kwargs['id'])
+
+        try:
+            if BCRYPTPasswordManager().check(user.password,
+                '%s%s' % (kwargs['password'], user.salt)):
+                return True
+        except TypeError:
+            pass
