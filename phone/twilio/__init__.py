@@ -31,6 +31,8 @@ NOT_A_VALID_MAILBOX = """I'm sorry, that is not a valid mailbox"""
 
 ERROR_MESSAGE = """A system error has occurred"""
 
+DIDNT_HEAR_RECORDING = """I'm sorry, I didn't hear your outgoing message, please try again"""
+
 VOICE_PREFERENCE = 'woman'
 
 is_a_mailbox = re.compile('^[1-9]\d{3,}$')
@@ -185,7 +187,10 @@ def mailbox_record_greeting(request):
     response = twiml.Response()
     response.say(PLEASE_RECORD_YOUR_GREETING, voice=VOICE_PREFERENCE)
     response.record(action=request.route_url('twilio_mailbox_get_greeting',
-        _query={'Digits':digits, mailbox:mailbox}), playBeep=True, method='GET')
+        _query={'Digits':digits, mailbox:mailbox}), maxLength=60, method='GET')
+    response.say(DIDNT_HEAR_RECORDING, voice=VOICE_PREFERENCE)
+    response.redirect(action=request.route_url('twilio_mailbox_get_greeting',
+        _query={'Digits':digits, mailbox:mailbox}), method='GET')
     return Response(str(response))
 
 @view_config(route_name='twilio_mailbox_get_greeting')
