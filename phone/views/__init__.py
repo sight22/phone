@@ -37,11 +37,20 @@ def connect(request):
       return HTTPFound(location=request.route_url('index'))
     return {}
 
+from phone.libs.libphone import get_phones
+
 @view_config(route_name='twilio_buy_number', renderer='twilio_buy_number.jinja2')
 def twilio_buy_number(request):
     if request.user.get_profile(request).twilio_sid is None:
       return HTTPFound(location=request.route_url('connect'))
-    return {}
+
+    if request.method == "POST":
+        print request.POST
+
+    profile = request.user.get_profile(request)
+    numbers = get_phones(profile.address_1, profile.city, profile.state, profile.zip)
+
+    return {'numbers': numbers}
 
 @view_config(route_name='twc_authorize')
 def twc_authorize(request):

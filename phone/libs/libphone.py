@@ -7,8 +7,8 @@ from temboo.Library.Twilio.AvailablePhoneNumbers import LocalList
 
 def get_phones(addr1, city, state, zip):
     config = ConfigParser.ConfigParser()
-    config.readfp(open(os.path.join('/',os.path.dirname(
-        os.path.dirname(os.path.join(os.path.abspath(__file__)))), 'phone.cfg')))
+    config.readfp(open(os.path.join('/', os.path.dirname(os.path.dirname(
+        os.path.dirname(os.path.join(os.path.abspath(__file__))))), 'phone.cfg')))
 
     session = TembooSession('cd34', config.get('temboo', 'APP_KEY_NAME'),
         config.get('temboo', 'APP_KEY_VALUE'))
