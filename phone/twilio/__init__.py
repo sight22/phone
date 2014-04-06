@@ -1,3 +1,5 @@
+import re
+
 from pyramid.response import Response
 from pyramid.view import view_config
 
@@ -9,6 +11,8 @@ by the pound symbol, or, hit star for the menu.
 """
 
 ERROR_MESSAGE = """A system error has occurred"""
+
+is_a_mailbox = re.compile('[1-9]\d{3,}')
 
 @view_config(route_name='twilio_index')
 def index(request):
@@ -25,17 +29,15 @@ def index(request):
 """
 @view_config(route_name='twilio_process_input')
 def process_input(request):
-    print request.matched_route
+    print request.matched_route.name
     print request.params
     digits = request.params['Digits']
-    if digits.endswith('#'):
-        digits.replace('#','')
     star = request.matchdict['star']
     numeric = request.matchdict['numeric']
     response = twiml.Response()
-    if digits == "*":
+    if digits == '*':
         response.redirect(request.route_url(star), method='GET')
-    elif digits >= 1000 and digits <= 9999:
+    elif is_a_mailbox.match(digits):
         response.redirect(request.route_url(numeric), method='GET')
     else:
         response.say(ERROR_MESSAGE, voice='woman')
@@ -43,7 +45,7 @@ def process_input(request):
 
 @view_config(route_name='twilio_mailbox')
 def mailbox(request):
-    print request.matched_route
+    print request.matched_route.name
     print request.params
     response = twiml.Response()
     response.enqueue("Queue Demo")
@@ -51,7 +53,7 @@ def mailbox(request):
 
 @view_config(route_name='twilio_mailbox_admin')
 def mailbox_admin(request):
-    print request.matched_route
+    print request.matched_route.name
     print request.params
     response = twiml.Response()
     response.enqueue("Queue Demo")
@@ -59,7 +61,7 @@ def mailbox_admin(request):
 
 @view_config(route_name='twilio_mailbox_admin_listen')
 def listen(request):
-    print request.matched_route
+    print request.matched_route.name
     print request.params
     response = twiml.Response()
     response.enqueue("Queue Demo")
@@ -67,7 +69,7 @@ def listen(request):
 
 @view_config(route_name='twilio_mailbox_admin_change_greeting')
 def change_greeting(request):
-    print request.matched_route
+    print request.matched_route.name
     print request.params
     response = twiml.Response()
     response.enqueue("Queue Demo")
@@ -75,7 +77,7 @@ def change_greeting(request):
 
 @view_config(route_name='twilio_create_mailbox')
 def create_mailbox(request):
-    print request.matched_route
+    print request.matched_route.name
     print request.params
     response = twiml.Response()
     response.enqueue("Queue Demo")
