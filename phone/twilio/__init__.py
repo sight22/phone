@@ -5,7 +5,9 @@ from pyramid.view import view_config
 
 from twilio import twiml
 
-from phone.twilio.dbutils import get_mailbox_url
+from phone.twilio.dbutils import (create_mailbox,
+                                  get_mailbox_url,
+                                 )
 
 WELCOME_MESSAGE = """Welcome to the voice mail system. Please enter
 the four digit extension of the person you're trying to reach followed
@@ -31,7 +33,7 @@ def index(request):
     response = twiml.Response()
     response.gather(method='GET',
         action=request.route_url('twilio_process_input',
-        star='twilio_create_mailbox_ask',
+        star='twilio_mailbox_create_ask',
         numeric='twilio_mailbox')) \
         .say(WELCOME_MESSAGE, voice=VOICE_PREFERENCE, loop=2)
     return Response(str(response))
@@ -48,11 +50,13 @@ def process_input(request):
     numeric = request.matchdict['numeric']
     response = twiml.Response()
     if digits == '*':
-        response.redirect(request.route_url(star), method='GET')
+        response.redirect(request.route_url(star, _query={'Digits':digits}),
+            method='GET')
     elif is_a_mailbox.match(digits):
         url = get_mailbox_url(digits)
-        if url:
-            response.redirect(request.route_url(numeric), method='GET')
+        if url or request.params.get('create'):
+            response.redirect(request.route_url(numeric,
+                _query={'Digits':digits}), method='GET')
         else:
             response.say(NOT_A_VALID_MAILBOX, voice=VOICE_PREFERENCE)
             response.pause(length=2)
@@ -66,6 +70,7 @@ def mailbox(request):
     print request.matched_route.name
     print request.params
     # if mailbox url, if not, play setup instructions
+    digits = request.params['Digits']
     url = get_mailbox_url(digits)
     response = twiml.Response()
     response.gather(method='GET',
@@ -106,19 +111,23 @@ def mailbox_create_ask(request):
     response.gather(method='GET',
         action=request.route_url('twilio_process_input',
         star=None,
-        numeric='twilio_mailbox_check')) \
+        numeric='twilio_mailbox_check', _query={'create':True})) \
         .say(CREATE_A_MAILBOX, voice=VOICE_PREFERENCE)
     return Response(str(response))
 
 @view_config(route_name='twilio_mailbox_check')
 def mailbox_check(request):
+    print request.params
+    digits = request.params['Digits']
     url = get_mailbox_url(digits)
     if url is None:
+        create_mailbox(digits)
         response = twiml.Response()
         response.gather(method='GET',
             action=request.route_url('twilio_process_input',
             star=None,
-            numeric='twilio_mailbox_password')) \
+            numeric='twilio_mailbox_password'),
+            _query={'number':digits}) \
             .say(MAILBOX_CREATED, voice=VOICE_PREFERENCE)
     return Response(str(response))
 
