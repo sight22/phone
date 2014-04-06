@@ -7,6 +7,7 @@ from twilio import twiml
 
 from phone.twilio.dbutils import (create_mailbox,
                                   get_mailbox_url,
+                                  update_mailbox,
                                  )
 
 WELCOME_MESSAGE = """Welcome to the voice mail system. Please enter
@@ -89,13 +90,11 @@ def process_password(request):
 def mailbox(request):
     print request.matched_route.name
     print request.params
-    # if mailbox url, if not, play setup instructions
     digits = request.params['Digits']
     url = get_mailbox_url(request.params['Called'], digits)
     response = twiml.Response()
     response.gather(method='GET',
         action=request.route_url('twilio_process_input',
-        star='twilio_create_mailbox_ask',
         numeric='twilio_mailbox')) \
         .say(WELCOME_MESSAGE, voice=VOICE_PREFERENCE, loop=2)
     return Response(str(response))
@@ -195,7 +194,11 @@ def mailbox_record_greeting(request):
 def mailbox_get_greeting(request):
     digits = request.params['Digits']
     mailbox = request.params['mailbox']
+    update_mailbox(request.params['Called'], mailbox,
+        request.params['RecordingUrl'])
     response = twiml.Response()
-    response.say(THANK_YOU.format(number=digits, mailbox=mailbox),
+    response.say(THANK_YOU.format(number= \
+        ''.join([x for x in request.params['Called'][1:]]), mailbox= \
+        ' '.join([x for x in mailbox])),
         voice=VOICE_PREFERENCE)
     return Response(str(response))
