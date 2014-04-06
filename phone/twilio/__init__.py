@@ -71,8 +71,11 @@ def process_input(request):
 @view_config(route_name='twilio_process_password')
 def process_password(request):
     digits = request.params['Digits']
+    numeric = request.matchdict['numeric']
+    mailbox = request.matchdict['mailbox']
+    response = twiml.Response()
     response.redirect(request.route_url(numeric,
-        _query={'Digits':digits}), method='GET')
+        _query={'mailbox':mailbox, 'Digits':digits}), method='GET')
     return Response(str(response))
 
 @view_config(route_name='twilio_mailbox')
@@ -128,10 +131,9 @@ def mailbox_check(request):
         create_mailbox(digits)
         response = twiml.Response()
         response.gather(method='GET',
-            action=request.route_url('twilio_process_input',
-            star=None,
-            numeric='twilio_mailbox_password'),
-            _query={'number':digits, 'password':True}) \
+            action=request.route_url('twilio_process_password',
+            mailbox=digits,
+            numeric='twilio_mailbox_password')) \
             .say(MAILBOX_CREATED, voice=VOICE_PREFERENCE)
     else:
         response.gather(method='GET',
@@ -143,12 +145,16 @@ def mailbox_check(request):
 
 @view_config(route_name='twilio_mailbox_password')
 def mailbox_password(request):
-    url = get_mailbox_url(digits)
+    print request.matched_route.name
+    print request.params
+    digits = request.params['Digits']
+    mailbox = request.params['mailbox']
+    url = get_mailbox_url(mailbox)
     if url is None:
         response = twiml.Response()
         response.gather(method='GET',
-            action=request.route_url('twilio_process_input',
-            star=None,
+            action=request.route_url('twilio_mailbox_record_greeting',
+            mailbox=digits,
             numeric='twilio_mailbox_password_verify')) \
             .say(MAILBOX_CREATED, voice=VOICE_PREFERENCE)
     return Response(str(response))
