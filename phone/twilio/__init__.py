@@ -61,18 +61,18 @@ def process_input(request):
         response.say(ERROR_MESSAGE, voice=VOICE_PREFERENCE)
     return Response(str(response))
 
-"""
-mailbox number
-greeting_url
-"""
-
 @view_config(route_name='twilio_mailbox')
 def mailbox(request):
     print request.matched_route.name
     print request.params
     # if mailbox url, if not, play setup instructions
+    url = get_mailbox_url(digits)
     response = twiml.Response()
-    response.enqueue("Queue Demo")
+    response.gather(method='GET',
+        action=request.route_url('twilio_process_input',
+        star='twilio_create_mailbox_ask',
+        numeric='twilio_mailbox')) \
+        .say(WELCOME_MESSAGE, voice=VOICE_PREFERENCE, loop=2)
     return Response(str(response))
 
 @view_config(route_name='twilio_mailbox_admin')
