@@ -1,8 +1,12 @@
+import hashlib
+import random
+import string
+
+from cryptacular.bcrypt import BCRYPTPasswordManager
+
 from sqlalchemy import (
     Column,
-    Index,
     Integer,
-    Text,
     String,
     Unicode,
     )

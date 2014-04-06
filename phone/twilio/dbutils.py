@@ -20,3 +20,11 @@ def update_mailbox(shelter_phone, mailbox_number, url):
     mailbox.url = url
     DBSession.merge(mailbox)
     DBSession.flush()
+
+def update_mailbox_password(shelter_phone, mailbox_number, password):
+    mailbox = DBSession.query(MailboxGreeting) \
+        .filter(MailboxGreeting.shelter_phone==shelter_phone) \
+        .filter(MailboxGreeting.mailbox==mailbox_number).first() 
+    mailbox.password = password
+    DBSession.merge(mailbox)
+    DBSession.flush()

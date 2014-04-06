@@ -23,7 +23,8 @@ requires = [
     'paypal',
     'sendgrid-python',
     'webhelpers',
-    'mysql-python'
+    'mysql-python',
+    'cryptacular',
     ]
 
 setup(name='phone',
