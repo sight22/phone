@@ -11,7 +11,8 @@ def create_mailbox(shelter_phone, mailbox_number):
     mailbox = MailboxGreeting(shelter_phone=shelter_phone,
         mailbox=mailbox_number)
     DBSession.add(mailbox)
-    DBSession.flush()
+    DBSession.commit()
+    #DBSession.flush()
 
 def update_mailbox(shelter_phone, mailbox_number, url):
     mailbox = DBSession.query(MailboxGreeting) \
@@ -19,7 +20,8 @@ def update_mailbox(shelter_phone, mailbox_number, url):
         .filter(MailboxGreeting.mailbox==mailbox_number).first() 
     mailbox.url = url
     DBSession.merge(mailbox)
-    DBSession.flush()
+    DBSession.commit()
+    #DBSession.flush()
 
 def update_mailbox_password(shelter_phone, mailbox_number, password):
     mailbox = DBSession.query(MailboxGreeting) \
@@ -27,4 +29,5 @@ def update_mailbox_password(shelter_phone, mailbox_number, password):
         .filter(MailboxGreeting.mailbox==mailbox_number).first() 
     mailbox.password = password
     DBSession.merge(mailbox)
+    DBSession.commit()
     DBSession.flush()
