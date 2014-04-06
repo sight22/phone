@@ -33,6 +33,8 @@ NOT_A_VALID_MAILBOX = """I'm sorry, that is not a valid mailbox"""
 
 ERROR_MESSAGE = """A system error has occurred"""
 
+ACCOUNT_EXISTS = """An account with that mailbox already exists"""
+
 DIDNT_HEAR_RECORDING = """I'm sorry, I didn't hear your outgoing message, please try again"""
 
 VOICE_PREFERENCE = 'woman'
@@ -74,7 +76,7 @@ def process_input(request):
             response.pause(length=2)
             response.redirect(request.route_url('twilio_index'), method='GET')
     else:
-        response.say(ERROR_MESSAGE, voice=VOICE_PREFERENCE)
+        response.say(ACCOUNT_EXISTS, voice=VOICE_PREFERENCE)
         response.redirect(request.route_url('twilio_index'), method='GET')
     return Response(str(response))
 
